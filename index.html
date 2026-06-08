@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agastya Bassi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7c5cfc;
+  --p2:rgba(124,92,252,.18);
+  --text:#ddd9ee;
+  --muted:#524f6a;
+  --dim:#26243a;
+  --mono:'Space Mono',monospace;
+  --serif:'Cormorant Garamond',serif;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#06060d;color:var(--text);font-family:var(--mono);cursor:none}
+canvas{position:fixed;inset:0;z-index:0}
+
+/* cursor */
+.cur{position:fixed;width:5px;height:5px;background:rgba(167,139,250,.9);border-radius:50%;pointer-events:none;z-index:999;transform:translate(-50%,-50%);transition:width .15s,height .15s,opacity .2s}
+.cur-ring{position:fixed;width:28px;height:28px;border:1px solid rgba(124,92,252,.25);border-radius:50%;pointer-events:none;z-index:998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
+
+/* ui layer */
+#ui{position:fixed;inset:0;z-index:10;pointer-events:none}
+
+.name-block{position:absolute;top:44px;left:52px;pointer-events:all}
+.name-main{font-family:var(--serif);font-size:13px;font-weight:300;color:var(--text);letter-spacing:.18em;text-transform:uppercase;opacity:0;animation:fi 1.2s .3s forwards}
+.name-sub{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.2em;margin-top:5px;opacity:0;animation:fi 1.2s .6s forwards}
+
+.links-block{position:absolute;top:48px;right:52px;display:flex;flex-direction:column;align-items:flex-end;gap:9px;pointer-events:all;opacity:0;animation:fi 1.2s .8s forwards}
+.ext-link{font-family:var(--mono);font-size:8px;color:var(--muted);text-decoration:none;letter-spacing:.14em;text-transform:uppercase;transition:color .2s;position:relative}
+.ext-link::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--p);transform:scaleX(0);transform-origin:right;transition:transform .25s}
+.ext-link:hover{color:var(--text)}.ext-link:hover::after{transform:scaleX(1);transform-origin:left}
+
+.hero-block{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;width:100%}
+.hero-title{font-family:'Cormorant Garamond',Georgia,'Times New Roman',serif;font-size:clamp(64px,8vw,108px);font-weight:300;color:var(--text);line-height:.95;letter-spacing:-.02em;opacity:0;animation:fi 1.4s .5s forwards}
+.hero-title em{font-style:italic;color:rgba(167,139,250,.8);display:block}
+.hero-role{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.26em;text-transform:uppercase;margin-top:20px;opacity:0;animation:fi 1.2s 1s forwards}
+
+.status-block{position:absolute;bottom:38px;left:52px;pointer-events:all;opacity:0;animation:fi 1.2s 1.2s forwards}
+.status-dot{display:inline-block;width:4px;height:4px;border-radius:50%;background:#4ade80;margin-right:8px;animation:blink 3s ease-in-out infinite;vertical-align:middle}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.status-text{font-size:8px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;vertical-align:middle}
+
+.nav-dots{position:absolute;bottom:34px;right:52px;display:flex;gap:20px;pointer-events:all;opacity:0;animation:fi 1.2s 1.4s forwards}
+.nav-btn{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;background:none;border:none;cursor:none;padding:4px 0;transition:color .2s;position:relative}
+.nav-btn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--p);transform:scaleX(0);transform-origin:right;transition:transform .25s}
+.nav-btn:hover,.nav-btn.active{color:var(--text)}
+.nav-btn:hover::after,.nav-btn.active::after{transform:scaleX(1);transform-origin:left}
+
+.hint{position:absolute;bottom:38px;left:50%;transform:translateX(-50%);font-size:7px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;opacity:0;animation:fi 1s 2.2s forwards;pointer-events:none;white-space:nowrap}
+
+/* panel */
+.panel{position:fixed;bottom:0;left:0;right:0;z-index:20;background:rgba(6,6,13,.93);backdrop-filter:blur(28px);border-top:1px solid rgba(124,92,252,.12);padding:44px 52px 52px;transform:translateY(100%);transition:transform .5s cubic-bezier(.16,1,.3,1);pointer-events:none;max-height:75vh;overflow-y:auto}
+.panel.open{transform:translateY(0);pointer-events:all}
+.panel-close{position:absolute;top:20px;right:52px;font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;background:none;border:none;cursor:none;transition:color .2s}
+.panel-close:hover{color:var(--text)}
+.panel-label{font-family:var(--mono);font-size:8px;color:var(--p);letter-spacing:.22em;text-transform:uppercase;margin-bottom:28px;display:flex;align-items:center;gap:10px}
+.panel-label::before{content:'';width:16px;height:1px;background:var(--p)}
+
+/* work grid */
+.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(124,92,252,.08);border:1px solid rgba(124,92,252,.08)}
+.work-item{background:rgba(6,6,13,.97);padding:32px 30px;transition:background .3s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.work-item::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:var(--p);transform:scaleX(0);transition:transform .35s}
+.work-item:hover{background:rgba(124,92,252,.05)}.work-item:hover::before{transform:scaleX(1)}
+.work-org{font-size:9px;color:var(--p);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px}
+.work-role{font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:300;color:var(--text);margin-bottom:10px;line-height:1.2}
+.work-desc{font-size:9px;color:var(--muted);line-height:1.9;letter-spacing:.03em;flex:1}
+.work-date{font-size:8px;color:var(--dim);letter-spacing:.1em;margin-top:14px;text-transform:uppercase}
+.work-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.wtag{font-size:8px;color:rgba(124,92,252,.75);background:rgba(124,92,252,.07);border:1px solid rgba(124,92,252,.18);padding:3px 9px;letter-spacing:.05em}
+
+/* now cols */
+.now-cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:44px}
+.now-col-label{font-size:9px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(124,92,252,.1)}
+.now-item{margin-bottom:20px}
+.now-item-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:300;color:var(--text);margin-bottom:5px;line-height:1.2}
+.now-item-sub{font-size:9px;color:var(--muted);letter-spacing:.04em;line-height:1.9}
+.now-item-sub a{color:rgba(124,92,252,.8);text-decoration:none}
+.now-item-sub a:hover{text-decoration:underline}
+
+/* thoughts */
+.thoughts-list{display:flex;flex-direction:column;gap:1px;background:rgba(124,92,252,.07);border:1px solid rgba(124,92,252,.08);max-width:820px}
+.thought-row{background:rgba(6,6,13,.97);padding:22px 30px;display:flex;justify-content:space-between;align-items:baseline;gap:28px;transition:background .2s;cursor:none}
+.thought-row:hover{background:rgba(124,92,252,.04)}
+.thought-t{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;font-weight:300;color:var(--text);line-height:1.3}
+.thought-m{font-size:8px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+
+/* scrollbar */
+.panel::-webkit-scrollbar{width:3px}.panel::-webkit-scrollbar-track{background:transparent}.panel::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:700px){
+  .name-block{top:24px;left:22px}.links-block{top:24px;right:22px}
+  .status-block{bottom:24px;left:22px}.nav-dots{bottom:20px;right:22px}
+  .panel{padding:36px 22px 44px}.panel-close{right:22px}
+  .now-cols{grid-template-columns:1fr;gap:28px}
+  .hero-title{font-size:40px}
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curRing"></div>
+<canvas id="c"></canvas>
+
+<div id="ui">
+  <div class="name-block">
+    <div class="name-main">Agastya Bassi</div>
+    <div class="name-sub">Los Angeles · Delhi</div>
+  </div>
+  <div class="links-block">
+    <a href="https://www.linkedin.com/in/agastya-bassi/" target="_blank" class="ext-link">LinkedIn ↗</a>
+    <a href="https://github.com/agastya-bassi" target="_blank" class="ext-link">GitHub ↗</a>
+  </div>
+  <div class="hero-block">
+    <div class="hero-title">Agastya<br><em>Bassi.</em></div>
+    <div class="hero-role">AI · ML · USC Marshall</div>
+  </div>
+  <div class="status-block">
+    <span class="status-dot"></span>
+    <span class="status-text">ML Intern · ThoughtsWin · 2026</span>
+  </div>
+  <div class="nav-dots">
+    <button class="nav-btn" data-panel="work">Work</button>
+    <button class="nav-btn" data-panel="now">Now</button>
+    <button class="nav-btn" data-panel="thoughts">Thoughts</button>
+  </div>
+  <div class="hint">drag nodes · click to ripple</div>
+</div>
+
+<!-- WORK -->
+<div class="panel" id="panel-work">
+  <button class="panel-close" data-close>Close ✕</button>
+  <div class="panel-label">Work · 2025 – 2026</div>
+  <div class="work-grid">
+    <div class="work-item">
+      <div class="work-org">ThoughtsWin</div>
+      <div class="work-role">Machine Learning Intern</div>
+      <div class="work-desc">ML Intern Summer '26 — core model development.</div>
+      <div class="work-tags"><span class="wtag">ML</span><span class="wtag">2026</span></div>
+      <div class="work-date">Jun 2026 — Present</div>
+    </div>
+    <div class="work-item">
+      <div class="work-org">USC ACE Lab · Viterbi</div>
+      <div class="work-role">Student Researcher</div>
+      <div class="work-desc">Critical thinking model studying LLM × adult cognition. EEG pipelines, ICA artifact rejection, ERP analysis across theta / alpha / beta bands.</div>
+      <div class="work-tags"><span class="wtag">EEG</span><span class="wtag">LLMs</span><span class="wtag">Python</span><span class="wtag">ICA</span></div>
+      <div class="work-date">Feb 2026 — Present</div>
+    </div>
+    <div class="work-item">
+      <div class="work-org">Parkzy · Marshall AI Assoc.</div>
+      <div class="work-role">Lead ML Developer</div>
+      <div class="work-desc">XGBoost / LightGBM engine forecasting real-time parking availability — geospatial feature engineering on occupancy + sensor data.</div>
+      <div class="work-tags"><span class="wtag">XGBoost</span><span class="wtag">LightGBM</span><span class="wtag">Geospatial</span></div>
+      <div class="work-date">Feb — May 2026</div>
+    </div>
+    <div class="work-item">
+      <div class="work-org">Stealth Startup</div>
+      <div class="work-role">Co-Founder</div>
+      <div class="work-desc">Building something. Details soon.</div>
+      <div class="work-tags"><span class="wtag">Founding</span><span class="wtag">2026</span></div>
+      <div class="work-date">Mar 2026</div>
+    </div>
+    <div class="work-item">
+      <div class="work-org">MOVE · Marshall</div>
+      <div class="work-role">Initiative Lead & Developer</div>
+      <div class="work-desc">Quantitative ESG analytics for large-cap tech. Multi-factor prediction model in Python + R.</div>
+      <div class="work-tags"><span class="wtag">ESG</span><span class="wtag">Python</span><span class="wtag">R</span></div>
+      <div class="work-date">Sep — Dec 2025</div>
+    </div>
+    <div class="work-item">
+      <div class="work-org">Paisalo Digital</div>
+      <div class="work-role">CS Developer Intern</div>
+      <div class="work-desc">BERT sentiment model for microfinance policy analysis. ~90% accuracy on rural loan recipient data.</div>
+      <div class="work-tags"><span class="wtag">BERT</span><span class="wtag">NLP</span></div>
+      <div class="work-date">Jun — Aug 2024</div>
+    </div>
+  </div>
+</div>
+
+<!-- NOW -->
+<div class="panel" id="panel-now">
+  <button class="panel-close" data-close>Close ✕</button>
+  <div class="panel-label">Now</div>
+  <div class="now-cols">
+    <div>
+      <div class="now-col-label">Building</div>
+      <div class="now-item">
+        <div class="now-item-title">F1 Undercut Predictor</div>
+        <div class="now-item-sub">ML model predicting pit stop strategy outcomes — 200+ events, 2023 season.<br><a href="https://github.com/agastya-bassi/f1-undercut-predictor" target="_blank">GitHub ↗</a></div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Pair Trading Backtester</div>
+        <div class="now-item-sub">Z-score mean reversion across any stock pair.<br><a href="https://github.com/agastya-bassi/pairs-trading-backtester" target="_blank">GitHub ↗</a></div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Stealth Startup</div>
+        <div class="now-item-sub">Co-founding something. More soon.</div>
+      </div>
+    </div>
+    <div>
+      <div class="now-col-label">Researching</div>
+      <div class="now-item">
+        <div class="now-item-title">LLMs × Cognition</div>
+        <div class="now-item-sub">How do LLMs change the way adults reason? Running EEG studies at USC ACE Lab.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Geospatial ML</div>
+        <div class="now-item-sub">Extracting behavioral signal from spatial + occupancy data. Parking availability as a prediction problem.</div>
+      </div>
+    </div>
+    <div>
+      <div class="now-col-label">At USC</div>
+      <div class="now-item">
+        <div class="now-item-title">B.S. AI for Business</div>
+        <div class="now-item-sub">Marshall × Viterbi. Dean's List, all semesters. 2025–2029.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Marshall AI Association</div>
+        <div class="now-item-sub">Director, Fall '26.</div>
+      </div>
+      <div class="now-item">
+        <div class="now-item-title">Certifications</div>
+        <div class="now-item-sub">Anthropic MCP · HubSpot Digital Marketing · DeepLearning.AI Supervised ML</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THOUGHTS -->
+<div class="panel" id="panel-thoughts">
+  <button class="panel-close" data-close>Close ✕</button>
+  <div class="panel-label">Thoughts</div>
+  <div class="thoughts-list">
+    <div class="thought-row"><div class="thought-t">What EEG data taught me about trusting AI outputs</div><div class="thought-m">Jun 2026 · Cognition</div></div>
+    <div class="thought-row"><div class="thought-t">Why geospatial ML is underrated in product thinking</div><div class="thought-m">May 2026 · ML</div></div>
+    <div class="thought-row"><div class="thought-t">The gap between a model that works and a model that ships</div><div class="thought-m">Apr 2026 · Engineering</div></div>
+    <div class="thought-row"><div class="thought-t">On founding things before you're ready</div><div class="thought-m">Mar 2026 · Startups</div></div>
+    <div class="thought-row"><div class="thought-t">ESG data is messier than anyone admits</div><div class="thought-m">Dec 2025 · Research</div></div>
+  </div>
+</div>
+
+<script>
+// ── CURSOR ──────────────────────────────────────
+const cur=document.getElementById('cur'),ring=document.getElementById('curRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
+(function ac(){
+  cur.style.left=mx+'px';cur.style.top=my+'px';
+  rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(ac);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.width='12px';cur.style.height='12px';ring.style.borderColor='rgba(124,92,252,.45)'});
+  el.addEventListener('mouseleave',()=>{cur.style.width='5px';cur.style.height='5px';ring.style.borderColor='rgba(124,92,252,.25)'});
+});
+
+// ── NEURAL FIELD ────────────────────────────────
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H;
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+window.addEventListener('resize',()=>{resize();init()});
+resize();
+
+const N=55;          // node count — fewer = calmer
+const MAX_D=140;     // connection distance
+const SPEED=0.18;    // drift speed — very slow
+
+// mouse state
+let mouse={x:-9999,y:-9999,down:false};
+document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY});
+
+// ripple on click
+let ripples=[];
+document.addEventListener('click',e=>{
+  // skip if panel is open / clicking ui
+  if(e.target.closest('.panel')||e.target.closest('#ui')) return;
+  ripples.push({x:e.clientX,y:e.clientY,r:0,max:180,alpha:0.5});
+});
+
+// nodes
+let nodes=[];
+class Node{
+  constructor(spread){
+    this.x=Math.random()*W;
+    this.y=spread?Math.random()*H:Math.random()*H;
+    this.vx=(Math.random()-.5)*SPEED;
+    this.vy=(Math.random()-.5)*SPEED;
+    this.r=Math.random()*1.6+0.8;
+    this.alpha=Math.random()*.28+.08;
+    // drag state
+    this.dragged=false;
+    this.tx=this.x;this.ty=this.y;
+  }
+  update(){
+    if(this.dragged) return;
+
+    // mouse repel — gentle push away
+    const dm=Math.hypot(mouse.x-this.x,mouse.y-this.y);
+    if(dm<90){
+      const force=(1-dm/90)*0.4;
+      this.x-=(mouse.x-this.x)/dm*force;
+      this.y-=(mouse.y-this.y)/dm*force;
+    }
+
+    // ripple push
+    ripples.forEach(rp=>{
+      const dr=Math.hypot(rp.x-this.x,rp.y-this.y);
+      const waveDist=Math.abs(dr-rp.r);
+      if(waveDist<18){
+        const force=(1-waveDist/18)*1.2;
+        const angle=Math.atan2(this.y-rp.y,this.x-rp.x);
+        this.vx+=Math.cos(angle)*force*.04;
+        this.vy+=Math.sin(angle)*force*.04;
+      }
+    });
+
+    // dampen + drift
+    this.vx*=0.992;
+    this.vy*=0.992;
+    // re-add tiny drift to avoid total stop
+    if(Math.abs(this.vx)<0.02) this.vx+=(Math.random()-.5)*0.02;
+    if(Math.abs(this.vy)<0.02) this.vy+=(Math.random()-.5)*0.02;
+    // cap speed
+    const spd=Math.hypot(this.vx,this.vy);
+    if(spd>0.6){this.vx=this.vx/spd*0.6;this.vy=this.vy/spd*0.6;}
+
+    this.x+=this.vx;
+    this.y+=this.vy;
+    if(this.x<-20)this.x=W+20;
+    if(this.x>W+20)this.x=-20;
+    if(this.y<-20)this.y=H+20;
+    if(this.y>H+20)this.y=-20;
+  }
+}
+
+function init(){nodes=Array.from({length:N},(_,i)=>new Node(true))}
+init();
+
+// drag
+let dragNode=null;
+canvas.addEventListener('mousedown',e=>{
+  if(e.target!==canvas)return;
+  // find nearest node within 28px
+  let best=null,bd=28;
+  nodes.forEach(n=>{
+    const d=Math.hypot(n.x-e.clientX,n.y-e.clientY);
+    if(d<bd){bd=d;best=n;}
+  });
+  if(best){dragNode=best;dragNode.dragged=true;}
+});
+canvas.addEventListener('mousemove',e=>{
+  if(dragNode){dragNode.x=e.clientX;dragNode.y=e.clientY;}
+});
+canvas.addEventListener('mouseup',()=>{
+  if(dragNode){dragNode.dragged=false;dragNode=null;}
+});
+
+let frame=0;
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  frame++;
+
+  // ripples
+  ripples=ripples.filter(r=>r.alpha>0.01);
+  ripples.forEach(r=>{
+    r.r+=3.2;
+    r.alpha*=0.955;
+    ctx.beginPath();
+    ctx.arc(r.x,r.y,r.r,0,Math.PI*2);
+    ctx.strokeStyle=`rgba(124,92,252,${r.alpha*0.35})`;
+    ctx.lineWidth=1;
+    ctx.stroke();
+  });
+
+  // edges
+  for(let i=0;i<nodes.length;i++){
+    const a=nodes[i];
+    for(let j=i+1;j<nodes.length;j++){
+      const b=nodes[j];
+      const d=Math.hypot(b.x-a.x,b.y-a.y);
+      if(d<MAX_D){
+        const t=1-d/MAX_D;
+        // mouse proximity brightens edge
+        const dm=Math.min(
+          Math.hypot(mouse.x-a.x,mouse.y-a.y),
+          Math.hypot(mouse.x-b.x,mouse.y-b.y)
+        );
+        const boost=dm<120?((1-dm/120)*0.22):0;
+        const alpha=t*t*0.1+boost;
+        ctx.beginPath();
+        ctx.moveTo(a.x,a.y);
+        ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=`rgba(124,92,252,${Math.min(alpha,.32)})`;
+        ctx.lineWidth=0.4;
+        ctx.stroke();
+      }
+    }
+    // mouse edge — very subtle
+    const dm=Math.hypot(mouse.x-a.x,mouse.y-a.y);
+    if(dm<MAX_D*1.2){
+      const alpha=(1-dm/(MAX_D*1.2))*0.12;
+      ctx.beginPath();
+      ctx.moveTo(a.x,a.y);
+      ctx.lineTo(mouse.x,mouse.y);
+      ctx.strokeStyle=`rgba(167,139,250,${alpha})`;
+      ctx.lineWidth=0.35;
+      ctx.stroke();
+    }
+    a.update();
+  }
+
+  // nodes
+  nodes.forEach(n=>{
+    // very subtle glow on dragged node
+    if(n.dragged){
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r*5,0,Math.PI*2);
+      const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*5);
+      g.addColorStop(0,'rgba(167,139,250,.12)');
+      g.addColorStop(1,'rgba(167,139,250,0)');
+      ctx.fillStyle=g;
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+    // slightly brighter near mouse
+    const dm=Math.hypot(mouse.x-n.x,mouse.y-n.y);
+    const boost=dm<100?(1-dm/100)*0.3:0;
+    ctx.fillStyle=`rgba(124,92,252,${Math.min(n.alpha+boost,.55)})`;
+    ctx.fill();
+  });
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ── PANELS ──────────────────────────────────────
+const panels=document.querySelectorAll('.panel');
+let active=null;
+document.querySelectorAll('[data-panel]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const panel=document.getElementById('panel-'+btn.dataset.panel);
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    if(active===panel){panel.classList.remove('open');active=null;}
+    else{
+      panels.forEach(p=>p.classList.remove('open'));
+      panel.classList.add('open');active=panel;
+      btn.classList.add('active');
+    }
+  });
+});
+document.querySelectorAll('[data-close]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    panels.forEach(p=>p.classList.remove('open'));
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    active=null;
+  });
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){panels.forEach(p=>p.classList.remove('open'));active=null;document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));}
+});
+</script>
+</body>
+</html>
