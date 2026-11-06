@@ -5,527 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="color-scheme" content="light"/>
 <title>Agastya Bassi</title>
-<meta name="description" content="Agastya Bassi studies AI for Business and Applied Mathematics at USC, researches LLMs and cognition, and is building Ostrix."/>
+<meta name="description" content="Agastya Bassi, co-founder of Ostrix. Studies AI for Business and Applied Mathematics at USC."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;1,6..72,400&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#EDF0F5;
-  --surface:#FFFFFF;
-  --ink:#12162B;
-  --muted:#5A6072;
-  --line:#D3D8E2;
-  --work:#2F4BFF;
-  --research:#0B9A85;
-  --building:#D9951A;
-  --founding:#F0563A;
-  --display:'Bricolage Grotesque',system-ui,-apple-system,'Segoe UI',sans-serif;
-  --body:'Newsreader',Georgia,'Times New Roman',serif;
-}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--display);-webkit-font-smoothing:antialiased;min-height:100%}
-a{color:inherit}
-:focus-visible{outline:2px solid var(--work);outline-offset:3px;border-radius:4px}
-
-/* top bar */
-.top{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px clamp(20px,4vw,56px);max-width:1360px;margin:0 auto}
-.top .mark{font-weight:700;font-size:16px;text-decoration:none;letter-spacing:-.01em}
-.top nav{display:flex;gap:22px;flex-wrap:wrap;font-size:15px}
-.top nav a{text-decoration:none;color:var(--muted);transition:color .15s}
-.top nav a:hover{color:var(--ink)}
-
-/* hero */
-.hero{display:grid;grid-template-columns:minmax(300px,5fr) 7fr;gap:clamp(20px,3vw,48px);align-items:stretch;padding:12px clamp(20px,4vw,56px) 40px;max-width:1360px;margin:0 auto}
-.intro{display:flex;flex-direction:column;justify-content:center;padding:24px 0}
-h1{font-size:clamp(52px,7.4vw,112px);font-weight:800;line-height:.9;letter-spacing:-.045em;font-variation-settings:"opsz" 96}
-.lede{font-family:var(--body);font-size:clamp(19px,1.6vw,22px);line-height:1.5;color:var(--ink);margin-top:28px;max-width:36ch}
-.lede a{text-decoration-color:var(--founding);text-decoration-thickness:2px;text-underline-offset:3px}
-.status{display:inline-flex;align-items:center;gap:10px;margin-top:28px;font-size:15px;color:var(--muted)}
-.status i{width:8px;height:8px;border-radius:50%;background:#1FB85A;box-shadow:0 0 0 4px rgba(31,184,90,.16)}
-.status a{color:var(--ink);font-weight:500}
-
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin-top:32px}
-.chip{font:inherit;font-size:14px;font-weight:500;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 14px 7px 12px;border-radius:999px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:border-color .15s,background .15s,color .15s}
-.chip::before{content:'';width:9px;height:9px;border-radius:50%;background:var(--c,var(--ink))}
-.chip:hover{border-color:var(--ink)}
-.chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
-.chip[aria-pressed="true"]::before{box-shadow:0 0 0 2px #fff inset}
-
-/* graph */
-.graph-wrap{position:relative;background:var(--surface);border-radius:28px;min-height:700px;overflow:hidden;border:1px solid var(--line);
-  background-image:radial-gradient(circle,#DCE1EA 1px,transparent 1.2px);background-size:22px 22px}
-#graph{position:absolute;inset:0;width:100%;height:100%;touch-action:none;user-select:none;-webkit-user-select:none}
-.hint{position:absolute;left:20px;bottom:16px;font-size:13px;color:var(--muted);background:rgba(255,255,255,.9);padding:6px 10px;border-radius:8px;pointer-events:none}
-.link{stroke:#C4CAD6;stroke-width:1.2;transition:stroke .2s,opacity .2s}
-.node{cursor:grab;transition:opacity .2s}
-.node:active{cursor:grabbing}
-.node circle{transition:r .2s}
-.node .dot{stroke:#fff;stroke-width:3}
-.node .halo{opacity:0;transition:opacity .2s}
-.node text{font-family:var(--display);pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round}
-.node.item text{font-size:14px;font-weight:700;fill:var(--ink)}
-.node.skill text{font-size:12.5px;font-weight:500;fill:var(--muted)}
-.node.skill .dot{fill:#fff;stroke:var(--ink);stroke-width:1.5}
-.node:focus{outline:none}
-.node:focus-visible .halo,.node.hot .halo{opacity:.22}
-svg.dim .node:not(.lit){opacity:.16}
-svg.dim .link:not(.lit){opacity:.12}
-svg .link.lit{stroke:var(--ink);stroke-width:1.6}
-
-/* sections */
-main{max-width:1360px;margin:0 auto;padding:0 clamp(20px,4vw,56px) 80px}
-section.block{display:grid;grid-template-columns:minmax(180px,3fr) 9fr;gap:24px;padding:56px 0;border-top:1.5px solid var(--ink)}
-section.block h2{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
-section.block h2 small{display:block;font-size:15px;font-weight:400;color:var(--muted);letter-spacing:0;margin-top:8px}
-.rows{list-style:none}
-.row{display:grid;grid-template-columns:150px 1fr auto;gap:24px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--line);cursor:pointer;position:relative}
-.row:first-child{padding-top:4px}
-.row:hover .row-title,.row:focus-visible .row-title{text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:3px;text-underline-offset:4px}
-.row-date{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
-.row-title{font-size:21px;font-weight:700;letter-spacing:-.01em;line-height:1.25}
-.row-role{font-size:16px;font-weight:400;color:var(--muted)}
-.row-desc{font-family:var(--body);font-size:17px;line-height:1.55;margin-top:6px;max-width:62ch}
-.row-cat{width:10px;height:10px;border-radius:50%;background:var(--c);align-self:center}
-.static .row{cursor:default}
-.static .row:hover .row-title{text-decoration:none}
-.edu{font-family:var(--body);font-size:19px;line-height:1.55;max-width:60ch}
-.edu strong{font-family:var(--display);font-weight:700;font-size:21px;display:block;margin-bottom:4px}
-.edu p+p{margin-top:14px}
-
-footer{max-width:1360px;margin:0 auto;padding:28px clamp(20px,4vw,56px) 48px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:15px;color:var(--muted);border-top:1px solid var(--line)}
-footer a{color:var(--ink)}
-
-/* drawer */
-.scrim{position:fixed;inset:0;background:rgba(18,22,43,.18);opacity:0;pointer-events:none;transition:opacity .25s;z-index:40}
-.scrim.open{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:12px;right:12px;bottom:12px;width:min(440px,calc(100% - 24px));background:var(--surface);border-radius:24px;box-shadow:0 30px 80px -20px rgba(18,22,43,.35);transform:translateX(calc(100% + 24px));transition:transform .4s cubic-bezier(.2,.9,.2,1);z-index:50;padding:28px;overflow-y:auto;display:flex;flex-direction:column}
-.drawer.open{transform:none}
-.drawer .close{align-self:flex-end;font:inherit;font-size:14px;background:var(--bg);border:none;border-radius:999px;padding:7px 14px;cursor:pointer}
-.drawer .close:hover{background:var(--line)}
-.d-cat{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-top:18px}
-.d-cat::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--c)}
-.d-org{font-size:36px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-top:14px}
-.d-role{font-size:18px;margin-top:10px}
-.d-date{font-size:15px;color:var(--muted);margin-top:4px}
-.d-desc{font-family:var(--body);font-size:19px;line-height:1.55;margin-top:22px}
-.d-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:22px}
-.d-tags span{font-size:13px;background:var(--bg);padding:5px 11px;border-radius:999px}
-.d-links{display:flex;gap:20px;flex-wrap:wrap;margin-top:26px}
-.d-link{display:inline-block;font-weight:700;font-size:17px;text-decoration:none;border-bottom:3px solid var(--c);padding-bottom:2px;align-self:flex-start}
-.d-related{margin-top:auto;padding-top:32px;font-size:14px;color:var(--muted)}
-.d-related button{font:inherit;font-size:14px;background:none;border:none;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer;margin-right:12px}
-
-@media (max-width:900px){
-  .hero{grid-template-columns:1fr}
-  .graph-wrap{min-height:440px}
-  section.block{grid-template-columns:1fr;gap:20px;padding:44px 0}
-}
-@media (max-width:600px){
-  .top nav a.hide-sm{display:none}
-  .row{grid-template-columns:1fr auto;gap:4px 12px}
-  .row-date{grid-column:1;grid-row:1}
-  .row-main{grid-column:1 / -1;grid-row:2}
-  .row-cat{grid-column:2;grid-row:1}
-  .drawer{top:auto;left:8px;right:8px;bottom:8px;width:auto;max-height:78vh;transform:translateY(calc(100% + 16px))}
-}
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *{transition-duration:.01ms!important}
-}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
+<main>
 
-<header class="top">
-  <a class="mark" href="#">Agastya Bassi</a>
-  <nav aria-label="Primary">
-    <a href="#experience" class="hide-sm">Experience</a>
-    <a href="#projects" class="hide-sm">Projects</a>
-    <a href="#writing" class="hide-sm">Writing</a>
-    <a href="https://www.linkedin.com/in/agastya-bassi/" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://github.com/agastya-bassi" target="_blank" rel="noopener">GitHub</a>
-  </nav>
+<header>
+  <h1>Agastya Bassi</h1>
+  <p class="lede">I'm co-founder of <a href="https://ostrix.co">Ostrix</a>, where we turn point-of-sale data into demand forecasts so businesses selling perishable goods stop over-ordering and under-stocking.</p>
+  <p>I study AI for Business and Applied Mathematics at USC, and research how LLMs change the way people reason at the ACE Lab.</p>
+  <p>Reach me at <a href="mailto:agastyab@usc.edu">agastyab [at] usc [dot] edu</a>, or on <a href="https://www.linkedin.com/in/agastya-bassi/">LinkedIn</a> and <a href="https://github.com/agastya-bassi">GitHub</a>.</p>
 </header>
 
-<div class="hero">
-  <div class="intro">
-    <h1>Agastya<br>Bassi</h1>
-    <p class="lede">I study AI for Business, Applied Mathematics at USC, research how LLMs change the way people reason, and lead technical projects at the Marshall AI Association.</p>
-    <p class="status"><i aria-hidden="true"></i><span>Currently building <a href="https://ostrix.co" target="_blank" rel="noopener">Ostrix</a></span></p>
-    <div class="filters" role="group" aria-label="Filter the map">
-      <button class="chip" data-filter="all" aria-pressed="true" style="--c:var(--ink)">Everything</button>
-      <button class="chip" data-filter="founding" aria-pressed="false" style="--c:var(--founding)">Founding</button>
-      <button class="chip" data-filter="work" aria-pressed="false" style="--c:var(--work)">Work</button>
-      <button class="chip" data-filter="research" aria-pressed="false" style="--c:var(--research)">Research</button>
-      <button class="chip" data-filter="building" aria-pressed="false" style="--c:var(--building)">Building</button>
-    </div>
-  </div>
-  <div class="graph-wrap">
-    <svg id="graph" role="group" aria-label="Map of work, research and projects, linked by the skills they share"></svg>
-    <div class="hint" id="hint">Drag anything. Click a project to open it.</div>
-  </div>
-</div>
+<section>
+  <h2>Selected work</h2>
+  <ul class="work">
+    <li>
+      <span class="title">USC ACE Lab <span class="meta">· researcher</span></span>
+      <span class="desc">Measuring cognitive load with EEG to benchmark LLM chain of thought against human reasoning, 18+ participants. Findings in submission.</span>
+    </li>
+    <li>
+      <span class="title">ThoughtsWin <span class="meta">· ML engineer intern, summer 2026</span></span>
+      <span class="desc">Benchmarked four OCR engines on 1,000+ real pages, hit 97% accuracy, and shipped the winner to production.</span>
+    </li>
+    <li>
+      <span class="title"><a href="https://useparkzy.com/">Parkzy</a>, via Marshall AI Association <span class="meta">· director and technical PM</span></span>
+      <span class="desc">Led five people building a dynamic parking pricing engine. 1st place People's Choice at the Marshall AI Summit.</span>
+    </li>
+    <li>
+      <span class="title"><a href="https://usc-bbh.github.io/bbh-website/">AI Course Registration Engine</a></span>
+      <span class="desc">Registration tooling for USC's 50,000+ students, running fully in the browser via WebAssembly.</span>
+    </li>
+    <li>
+      <span class="title">Financial literacy game <span class="meta">· inventor, age 17</span></span>
+      <span class="desc">Invented and trademarked it. 1,300+ units sold in five languages, $10K+ revenue, 500+ donated to NGOs across India.</span>
+    </li>
+  </ul>
+</section>
 
-<main>
-  <section class="block" id="experience">
-    <h2>Experience</h2>
-    <ul class="rows" id="list-experience"></ul>
-  </section>
+<section>
+  <h2>Writing</h2>
+  <ol class="writing">
+    <!-- ESSAY -->
+  </ol>
+</section>
 
-  <section class="block" id="projects">
-    <h2>Projects</h2>
-    <ul class="rows" id="list-projects"></ul>
-  </section>
+<section>
+  <h2>Elsewhere</h2>
+  <p>E-board at Trojan Poker Club (coordinating degeneracy). USC Golf Club (expensive networking). Older side projects live on <a href="https://github.com/agastya-bassi">GitHub</a>.</p>
+</section>
 
-  <section class="block" id="education">
-    <h2>Education</h2>
-    <div class="edu">
-      <p><strong>B.S. AI for Business, Applied Mathematics</strong>University of Southern California, Marshall and Viterbi, 2025 to 2029. Dean's List every semester.</p>
-      <p>Coursework includes Applied Neural Networks, Machine Learning, Data Structures and Algorithms, Discrete Mathematics, Statistics and Data Science, and Ethics of AI.</p>
-      <p>Certifications in Anthropic's Model Context Protocol, DeepLearning.AI Supervised Machine Learning, and HubSpot Digital Marketing.</p>
-    </div>
-  </section>
+<footer>© 2026 Agastya Bassi</footer>
 
-
-  <section class="block" id="writing">
-    <h2>Writing</h2>
-    <p class="edu">Coming soon.</p>
-  </section>
 </main>
-
-<footer>
-  <span>Los Angeles</span>
-  <span><a href="https://www.linkedin.com/in/agastya-bassi/" target="_blank" rel="noopener">LinkedIn</a> &nbsp; <a href="https://github.com/agastya-bassi" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="https://ostrix.co" target="_blank" rel="noopener">Ostrix</a></span>
-</footer>
-
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-org" aria-hidden="true">
-  <button class="close" id="d-close">Close</button>
-  <div id="d-body"></div>
-</aside>
-
-<script>
-// ---------- content ----------
-const CATS = {
-  founding:{label:'Founding', color:'var(--founding)', hex:'#F0563A'},
-  work:{label:'Work', color:'var(--work)', hex:'#2F4BFF'},
-  research:{label:'Research', color:'var(--research)', hex:'#0B9A85'},
-  building:{label:'Building', color:'var(--building)', hex:'#D9951A'}
-};
-const SKILLS = {
-  ml:'Machine learning', python:'Python', llm:'LLMs', eeg:'EEG', geo:'Geospatial',
-  finance:'Finance', nlp:'NLP', product:'Product', agents:'Agents', prob:'Probability', net:'Networking'
-};
-const ITEMS = [
-  // order = hierarchy (lists render in this order); w = importance (node size)
-  {id:'thoughtswin', w:5, cat:'work', list:'experience', label:'ThoughtsWin', org:'ThoughtsWin', role:'Machine Learning Engineer Intern', date:'Jun – Sep 2026',
-   desc:'Benchmarked four OCR engines (Tesseract, PaddleOCR, TrOCR, Surya) on a 1,000+ page real-world corpus with a custom ground-truth eval harness, hit 97% accuracy, and shipped the winning engine as a production module. Built a schema-constrained LLM extraction pipeline with JSON tool use and per-field confidence scoring, and ran model evals through Azure AI Foundry on accuracy, licensing and on-prem VRAM.',
-   tags:['OCR','LLM extraction','Azure AI Foundry','Evals'], skills:['ml','llm','python']},
-  {id:'ostrix', w:5, cat:'founding', list:'experience', label:'Ostrix', org:'Ostrix', role:'Co-Founder', date:'Mar 2026 – Present',
-   desc:'POS intelligence.', tags:['Founding'], link:{href:'https://ostrix.co', text:'ostrix.co'}, skills:['product','ml']},
-  {id:'ace', w:4.5, cat:'research', list:'experience', label:'USC ACE Lab', org:'USC ACE Lab', role:'ML and Data Researcher', date:'Jan 2026 – Present',
-   desc:'Building an ML classifier on neural time-series data (ICA artifact rejection, band power, ERP extraction with MNE-Python) to benchmark LLM chain-of-thought against measured cognitive signals across 18+ participants. Designed a controlled study comparing performance with and without AI tooling that found statistically significant differences in cognitive load; findings are in submission.',
-   tags:['EEG','MNE-Python','LLMs','Signal processing'], skills:['eeg','llm','ml','python']},
-  {id:'maia', w:4.5, cat:'work', list:'experience', label:'MAIA × Parkzy', org:'Marshall AI Association (MAIA)', role:'Director and Technical PM', date:'2025 – Present',
-   desc:'Led a team of five building Parkzy\u2019s dynamic parking pricing engine: XGBoost and LightGBM demand forecasting, RL-based real-time price optimization, and Ticketmaster API integration. Early surveys showed 4.6/5 host satisfaction. Won 1st place People\u2019s Choice and 2nd place Judges\u2019 Choice at the Marshall AI Summit.',
-   tags:['XGBoost','LightGBM','Reinforcement learning','Team lead'], links:[{href:'https://useparkzy.com/', text:'useparkzy.com'},{href:'https://github.com/agastya-bassi/Parkzy', text:'GitHub'}], skills:['ml','geo','product','python']},
-  {id:'paisalo', w:3, cat:'work', list:'experience', label:'Paisalo Digital', org:'Paisalo Digital', role:'AI and Data Intern', date:'May – Jul 2024',
-   desc:'Built and deployed a BERT sentiment classifier on farmer and rural borrower feedback, reaching 90% accuracy across 5,000+ labeled samples. Integrated into Paisalo\u2019s loan assessment pipeline to inform credit decisions for rural borrowers across India.',
-   tags:['BERT','NLP','Fine-tuning'], skills:['nlp','ml','finance']},
-  {id:'cardgame', w:1.2, cat:'founding', list:'experience', label:'Finance game', org:'Financial literacy game', role:'Inventor', date:'2023 – 2025',
-   desc:'Invented and trademarked a financial literacy game: 1,300+ units sold across five languages, $10K+ in revenue, and 500+ units donated to NGOs across India. Also built a gamified finance learning platform with 16 modules and 2,500+ learners.',
-   tags:['Consumer','Trademarked','Edtech'], skills:['finance','product']},
-  {id:'move', w:1.8, cat:'work', list:'experience', label:'MOVE', org:'MOVE, Marshall', role:'Initiative Lead and Developer', date:'Sep – Dec 2025',
-   desc:'Quantitative ESG analytics for large-cap tech. Multi-factor prediction model in Python and R.', tags:['ESG','Python','R'], skills:['finance','python']},
-  {id:'poker', w:1.5, cat:'work', list:'experience', label:'Trojan Poker Club', org:'Trojan Poker Club', role:'E-board', date:'Current',
-   desc:'Coordinating degeneracy.', tags:['E-board'], skills:['prob','net']},
-  {id:'golf', w:1.5, cat:'work', list:'experience', label:'USC Golf Club', org:'USC Golf Club', role:'Member', date:'Current',
-   desc:'Expensive networking.', tags:['Club'], skills:['net']},
-
-  {id:'coursereg', w:3.5, cat:'building', list:'projects', label:'Course Reg Engine', org:'AI Course Registration Engine', role:'Faculty-led initiative', date:'May 2026 – Present',
-   desc:'Building an AI-powered course registration system for USC\u2019s 50,000+ students. Full-stack integration of a PDF parser, Python validation engine and React frontend, running client-side through Pyodide (WebAssembly).',
-   tags:['Python','React','Pyodide'], link:{href:'https://usc-bbh.github.io/bbh-website/', text:'Project website'}, skills:['llm','product','python']},
-  {id:'kalshi', w:3, cat:'building', list:'projects', label:'Kalshi Agent', org:'Kalshi Research Agent', role:'Personal project', date:'2026',
-   desc:'Five-node LangGraph pipeline that researches a prediction market question on the web, estimates the true probability with an LLM superforecaster node, and computes expected value against live Kalshi prices. Returns bet yes, bet no or skip in under 30 seconds.',
-   tags:['LangGraph','Groq','Prediction markets'], link:{href:'https://github.com/agastya-bassi/kalshi-research-agent', text:'View on GitHub'}, skills:['agents','llm','prob','python']},
-  {id:'llmeval', w:3, cat:'building', list:'projects', label:'LLM Eval Agent', org:'LLM Eval Agent', role:'Personal project', date:'2026',
-   desc:'Agentic benchmarking framework in LangGraph that tests open-source SLMs and LLMs on multi-turn coding, finance and reasoning datasets using multi-judge consensus scoring, and outputs ranked HTML reports on accuracy, latency and cost.',
-   tags:['LangGraph','Groq','Evals'], link:{href:'https://github.com/agastya-bassi/llm-eval-agent', text:'View on GitHub'}, skills:['agents','llm','python']},
-  {id:'ge', w:1.8, cat:'building', list:'projects', label:'USC GE Finder', org:'USC GE Double-Count Finder', role:'Personal project', date:'2026',
-   desc:'Finds USC courses that count toward two GE requirements at once, built on a reverse-engineered WebReg API with scheduled updates through GitHub Actions.', tags:['BeautifulSoup','GitHub Actions'],
-   link:{href:'https://github.com/agastya-bassi/usc-ge-optimizer', text:'View on GitHub'}, skills:['python','product']},
-  {id:'f1', w:1, cat:'building', list:'projects', label:'F1 Undercut', org:'F1 Undercut Predictor', role:'Personal project', date:'2026',
-   desc:'ML model predicting pit stop strategy outcomes across 200+ events from the 2023 season.', tags:['Random Forest','FastF1'],
-   link:{href:'https://github.com/agastya-bassi/f1-undercut-predictor', text:'View on GitHub'}, skills:['ml','python']},
-  {id:'pairs', w:1, cat:'building', list:'projects', label:'Pairs Trading', org:'Pairs Trading Backtester', role:'Personal project', date:'2026',
-   desc:'Z-score mean reversion backtester that works across any stock pair.', tags:['Streamlit','Quant'],
-   link:{href:'https://github.com/agastya-bassi/pairs-trading-backtester', text:'View on GitHub'}, skills:['finance','prob','python']},
-  {id:'geoml', w:1, cat:'research', list:'projects', label:'Geospatial ML', org:'Geospatial ML', role:'Research interest', date:'Ongoing',
-   desc:'Extracting behavioral signal from spatial and occupancy data, with parking availability as a prediction problem.', tags:['Geospatial','ML'], skills:['geo','ml']}
-];
-ITEMS.forEach(i=>{ i.links = i.links || (i.link?[i.link]:[]); });
-const byId = Object.fromEntries(ITEMS.map(i=>[i.id,i]));
-
-// ---------- lists ----------
-function renderList(which, el){
-  ITEMS.filter(i=>i.list===which).forEach(it=>{
-    const li=document.createElement('li');
-    li.className='row'; li.tabIndex=0; li.setAttribute('role','button');
-    li.style.setProperty('--c',CATS[it.cat].color);
-    li.dataset.id=it.id;
-    li.innerHTML=`<span class="row-date">${it.date}</span>
-      <div class="row-main"><div class="row-title">${it.org} <span class="row-role">${it.role}</span></div>
-      <p class="row-desc">${it.desc}${it.links.map(l=>` <a href="${l.href}" target="_blank" rel="noopener">${l.text}</a>`).join(' ')}</p></div>
-      <span class="row-cat" title="${CATS[it.cat].label}"></span>`;
-    li.addEventListener('click',e=>{ if(e.target.closest('a')) return; openDrawer(it.id); });
-    li.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();openDrawer(it.id);} });
-    li.addEventListener('mouseenter',()=>highlight(it.id));
-    li.addEventListener('mouseleave',()=>highlight(null));
-    el.appendChild(li);
-  });
-}
-renderList('experience',document.getElementById('list-experience'));
-renderList('projects',document.getElementById('list-projects'));
-
-// ---------- graph ----------
-const svgNS='http://www.w3.org/2000/svg';
-const svg=document.getElementById('graph');
-const wrap=svg.parentElement;
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let W=0,H=0;
-
-const nodes=[], links=[];
-ITEMS.forEach(it=>nodes.push({id:it.id,type:'item',cat:it.cat,label:it.label,w:it.w,r:4+it.w*3}));
-Object.entries(SKILLS).forEach(([k,v])=>nodes.push({id:'s:'+k,type:'skill',label:v,r:6}));
-const nodeById=Object.fromEntries(nodes.map(n=>[n.id,n]));
-ITEMS.forEach(it=>it.skills.forEach(s=>links.push({a:nodeById[it.id],b:nodeById['s:'+s]})));
-
-const gLinks=document.createElementNS(svgNS,'g');
-const gNodes=document.createElementNS(svgNS,'g');
-svg.append(gLinks,gNodes);
-
-links.forEach(l=>{
-  l.el=document.createElementNS(svgNS,'line');
-  l.el.setAttribute('class','link');
-  gLinks.appendChild(l.el);
-});
-nodes.forEach(n=>{
-  const g=document.createElementNS(svgNS,'g');
-  g.setAttribute('class','node '+n.type);
-  g.setAttribute('tabindex','0');
-  const halo=document.createElementNS(svgNS,'circle');
-  halo.setAttribute('class','halo'); halo.setAttribute('r',n.r*2.6);
-  const dot=document.createElementNS(svgNS,'circle');
-  dot.setAttribute('class','dot'); dot.setAttribute('r',n.r);
-  if(n.type==='item'){
-    const hex=CATS[n.cat].hex;
-    dot.setAttribute('fill',hex); halo.setAttribute('fill',hex);
-    g.setAttribute('role','button');
-    g.setAttribute('aria-label',byId[n.id].org+', '+byId[n.id].role+'. Open details');
-  }else{
-    halo.setAttribute('fill','#12162B');
-    g.setAttribute('role','button');
-    g.setAttribute('aria-label','Skill: '+n.label+'. Highlight related work');
-  }
-  const t=document.createElementNS(svgNS,'text');
-  t.textContent=n.label;
-  t.setAttribute('x',n.r+7);
-  t.setAttribute('y',4.5);
-  if(n.type==='item'){ t.style.fontSize=(11+n.w*1.5)+'px'; t.style.fontWeight=n.w>=3?800:600; t.setAttribute('y',(11+n.w*1.5)*.34); }
-  g.append(halo,dot,t);
-  gNodes.appendChild(g);
-  n.el=g; n.t=t;
-});
-
-function measure(){ nodes.forEach(n=>{ try{ n.tw=n.t.getComputedTextLength(); }catch(e){} }); }
-measure(); if(document.fonts) document.fonts.ready.then(measure);
-function size(){
-  const r=wrap.getBoundingClientRect();
-  W=r.width;H=r.height;
-  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-}
-size();
-// seed positions: skills near center, items around
-nodes.forEach((n,i)=>{
-  const a=(i/nodes.length)*Math.PI*2;
-  const rad=(n.type==='skill'?.18:.36)*Math.min(W,H);
-  n.x=W/2+Math.cos(a)*rad+(Math.random()-.5)*20;
-  n.y=H/2+Math.sin(a)*rad+(Math.random()-.5)*20;
-  n.vx=0;n.vy=0;
-});
-
-let alpha=1;
-let drag=null, downPos=null, moved=false;
-const pointer={x:-1e4,y:-1e4};
-function tick(){
-  const cx=W/2, cy=H/2;
-  // repulsion
-  for(let i=0;i<nodes.length;i++){
-    const a=nodes[i];
-    for(let j=i+1;j<nodes.length;j++){
-      const b=nodes[j];
-      let dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy||.01;
-      const d=Math.sqrt(d2);
-      const f=Math.min(7000*Math.min(1,W/700)*((a.r+b.r)/18)/d2,8)*alpha;
-      dx/=d;dy/=d;
-      a.vx-=dx*f;a.vy-=dy*f;b.vx+=dx*f;b.vy+=dy*f;
-    }
-  }
-  // label collision: push apart vertically when label boxes overlap
-  for(let i=0;i<nodes.length;i++){
-    const a=nodes[i];
-    for(let j=i+1;j<nodes.length;j++){
-      const b=nodes[j];
-      const dy=b.y-a.y, h=Math.max(a.r,b.r)+10;
-      if(Math.abs(dy)>=h) continue;
-      const aL=a.x-a.r, aR=a.x+a.r+7+(a.tw||60), bL=b.x-b.r, bR=b.x+b.r+7+(b.tw||60);
-      if(aR<bL||bR<aL) continue;
-      const push=(h-Math.abs(dy))*.08*(dy<0?-1:1);
-      a.vy-=push; b.vy+=push;
-    }
-  }
-  // springs
-  const rest=Math.max(90,Math.min(W,H)*.24);
-  links.forEach(l=>{
-    const dx=l.b.x-l.a.x, dy=l.b.y-l.a.y, d=Math.hypot(dx,dy)||.01;
-    const f=(d-rest)*.012*alpha;
-    const fx=dx/d*f, fy=dy/d*f;
-    l.a.vx+=fx;l.a.vy+=fy;l.b.vx-=fx;l.b.vy-=fy;
-  });
-  nodes.forEach(n=>{
-    // gravity to center
-    n.vx+=(cx-n.x)*.005*alpha;
-    n.vy+=(cy-n.y)*.005*alpha;
-    // pointer nudge (keeps it alive)
-    if(!reduce && n!==drag){
-      const dx=n.x-pointer.x, dy=n.y-pointer.y, d=Math.hypot(dx,dy);
-      if(d<110 && d>0){ const f=(1-d/110)*.9; n.vx+=dx/d*f; n.vy+=dy/d*f; }
-    }
-    if(n===drag||n.fixed){n.vx=0;n.vy=0;return;}
-    n.vx*=.82;n.vy*=.82;
-    n.x+=n.vx;n.y+=n.vy;
-    const pad=24, right=(n.tw||80)+n.r+14;
-    n.x=Math.max(pad,Math.min(W-right,n.x));
-    n.y=Math.max(pad,Math.min(H-64,n.y));
-  });
-  alpha=Math.max(alpha*.985, reduce?0:.12);
-}
-function draw(){
-  links.forEach(l=>{
-    l.el.setAttribute('x1',l.a.x);l.el.setAttribute('y1',l.a.y);
-    l.el.setAttribute('x2',l.b.x);l.el.setAttribute('y2',l.b.y);
-  });
-  nodes.forEach(n=>n.el.setAttribute('transform',`translate(${n.x.toFixed(1)},${n.y.toFixed(1)})`));
-}
-function loop(){
-  if(!reduce || alpha>0.01){ tick(); draw(); }
-  requestAnimationFrame(loop);
-}
-if(reduce){ for(let i=0;i<400;i++) tick(); draw(); }
-loop();
-
-addEventListener('resize',()=>{ size(); alpha=Math.max(alpha,.5); if(reduce){for(let i=0;i<200;i++)tick();draw();} });
-
-// ---------- highlight ----------
-let pinnedSkill=null, filter='all';
-function neighbors(id){
-  const set=new Set([id]);
-  links.forEach(l=>{ if(l.a.id===id) set.add(l.b.id); if(l.b.id===id) set.add(l.a.id); });
-  return set;
-}
-function applyLit(set){
-  if(!set){ svg.classList.remove('dim'); nodes.forEach(n=>n.el.classList.remove('lit','hot')); links.forEach(l=>l.el.classList.remove('lit')); return; }
-  svg.classList.add('dim');
-  nodes.forEach(n=>n.el.classList.toggle('lit',set.has(n.id)));
-  links.forEach(l=>l.el.classList.toggle('lit',set.has(l.a.id)&&set.has(l.b.id)));
-}
-function baseSet(){
-  if(pinnedSkill) return neighbors(pinnedSkill);
-  if(filter!=='all'){
-    const set=new Set();
-    ITEMS.filter(i=>i.cat===filter).forEach(i=>neighbors(i.id).forEach(x=>set.add(x)));
-    return set;
-  }
-  return null;
-}
-function highlight(id){
-  nodes.forEach(n=>n.el.classList.toggle('hot',n.id===id));
-  if(!id){ applyLit(baseSet()); return; }
-  applyLit(neighbors(id));
-}
-
-// filters
-document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>{
-  filter=c.dataset.filter; pinnedSkill=null;
-  document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===c?'true':'false'));
-  applyLit(baseSet());
-  alpha=Math.max(alpha,.35);
-}));
-
-// ---------- pointer: drag vs click ----------
-function svgPoint(e){ const r=svg.getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
-svg.addEventListener('pointermove',e=>{
-  const p=svgPoint(e); pointer.x=p.x; pointer.y=p.y;
-  if(drag){
-    if(Math.hypot(p.x-downPos.x,p.y-downPos.y)>4) moved=true;
-    drag.x=p.x; drag.y=p.y; alpha=Math.max(alpha,.3);
-  }
-});
-svg.addEventListener('pointerleave',()=>{ pointer.x=pointer.y=-1e4; });
-nodes.forEach(n=>{
-  n.el.addEventListener('pointerdown',e=>{
-    e.preventDefault(); drag=n; moved=false; downPos=svgPoint(e);
-    svg.setPointerCapture(e.pointerId);
-    document.getElementById('hint').style.opacity='0';
-  });
-  n.el.addEventListener('mouseenter',()=>{ if(!drag) highlight(n.id); });
-  n.el.addEventListener('mouseleave',()=>{ if(!drag) highlight(null); });
-  n.el.addEventListener('focus',()=>highlight(n.id));
-  n.el.addEventListener('blur',()=>highlight(null));
-  n.el.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); activate(n); } });
-});
-svg.addEventListener('pointerup',e=>{
-  if(!drag) { pinnedSkill=null; applyLit(baseSet()); return; }
-  const n=drag; drag=null;
-  if(!moved) activate(n);
-  highlight(null);
-});
-function activate(n){
-  if(n.type==='item') openDrawer(n.id);
-  else { pinnedSkill = pinnedSkill===n.id?null:n.id; applyLit(baseSet()); }
-}
-
-// ---------- drawer ----------
-const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim'), dBody=document.getElementById('d-body');
-let lastFocus=null;
-function openDrawer(id){
-  const it=byId[id]; lastFocus=document.activeElement;
-  drawer.style.setProperty('--c',CATS[it.cat].color);
-  const related=ITEMS.filter(o=>o.id!==id && o.skills.some(s=>it.skills.includes(s))).slice(0,4);
-  dBody.innerHTML=`
-    <div class="d-cat">${CATS[it.cat].label}</div>
-    <h3 class="d-org" id="d-org">${it.org}</h3>
-    <div class="d-role">${it.role}</div>
-    <div class="d-date">${it.date}</div>
-    <p class="d-desc">${it.desc}</p>
-    <div class="d-tags">${it.tags.map(t=>`<span>${t}</span>`).join('')}</div>
-    ${it.links.length?`<div class="d-links">${it.links.map(l=>`<a class="d-link" href="${l.href}" target="_blank" rel="noopener">${l.text}</a>`).join('')}</div>`:''}
-    ${related.length?`<div class="d-related">Related: ${related.map(r=>`<button data-go="${r.id}">${r.label}</button>`).join('')}</div>`:''}`;
-  dBody.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>openDrawer(b.dataset.go)));
-  drawer.classList.add('open'); scrim.classList.add('open'); drawer.setAttribute('aria-hidden','false');
-  highlight(id);
-  document.getElementById('d-close').focus();
-}
-function closeDrawer(){
-  drawer.classList.remove('open'); scrim.classList.remove('open'); drawer.setAttribute('aria-hidden','true');
-  highlight(null);
-  if(lastFocus && lastFocus.focus) lastFocus.focus();
-}
-document.getElementById('d-close').addEventListener('click',closeDrawer);
-scrim.addEventListener('click',closeDrawer);
-addEventListener('keydown',e=>{ if(e.key==='Escape' && drawer.classList.contains('open')) closeDrawer(); });
-</script>
 </body>
 </html>
