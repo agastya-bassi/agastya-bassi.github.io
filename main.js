@@ -100,28 +100,11 @@
   });
   apply();
 
-  /* ---------- Dot grid ---------- */
-  var dotsEl = document.getElementById('dots');
-  var dots = [], COLS = 14, ROWS = 4, GAP = 12;
-  for (var r = 0; r < ROWS; r++) {
-    for (var c = 0; c < COLS; c++) {
-      var s = document.createElement('span');
-      var x = 6 + c * GAP, y = 6 + r * GAP;
-      s.style.left = x + 'px'; s.style.top = y + 'px';
-      dotsEl.appendChild(s);
-      dots.push({ el: s, x: x, y: y });
-    }
-  }
-  dotsEl.addEventListener('mousemove', function (e) {
-    var b = dotsEl.getBoundingClientRect(), mx = e.clientX - b.left, my = e.clientY - b.top;
-    dots.forEach(function (d) {
-      var k = Math.max(0, 1 - Math.hypot(d.x - mx, d.y - my) / 42);
-      d.el.style.transform = 'scale(' + (1 + k * 1.6).toFixed(2) + ')';
-      d.el.classList.toggle('on', k > 0.15);
-    });
-  });
-  dotsEl.addEventListener('mouseleave', function () {
-    dots.forEach(function (d) { d.el.style.transform = ''; d.el.classList.remove('on'); });
+  /* ---------- Name in Devanagari ---------- */
+  var nameBtn = document.getElementById('name');
+  nameBtn.addEventListener('click', function () {
+    var on = nameBtn.classList.toggle('flip');
+    nameBtn.setAttribute('aria-pressed', String(on));
   });
 
   /* ---------- Copy email ---------- */

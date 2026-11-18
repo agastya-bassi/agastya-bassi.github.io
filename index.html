@@ -9,7 +9,7 @@
 <meta property="og:description" content="Co-founder of Ostrix. AI for Business and Applied Mathematics at USC."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500&family=Tiro+Devanagari+Hindi&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="/style.css"/>
 <script defer src="/main.js"></script>
 </head>
@@ -28,10 +28,7 @@
 <main>
 
 <header>
-  <div class="name-row">
-    <h1>Agastya Bassi</h1>
-    <div class="dots" id="dots" aria-hidden="true"></div>
-  </div>
+  <h1><button type="button" class="name" id="name" aria-pressed="false" aria-label="Agastya Bassi, toggle Hindi spelling"><span class="en">Agastya Bassi</span><span class="hi" lang="hi" aria-hidden="true">अगस्त्य बस्सी</span></button></h1>
   <p class="lede">I'm co-founder of <a href="https://ostrix.co">Ostrix</a>, where we turn point-of-sale data into demand forecasts so businesses selling perishable goods stop over-ordering and under-stocking.</p>
   <p>I study AI for Business and Applied Mathematics at USC, and research how LLMs change the way people reason at the ACE Lab.</p>
   <div class="contact">
@@ -83,7 +80,13 @@
 </section>
 
 <footer>
-  <button type="button" class="copyright" id="golf-toggle" title="fore?" aria-expanded="false" aria-controls="golf">© 2026 Agastya Bassi</button>
+  <div class="foot-row">
+    <span class="copyright">© 2026 Agastya Bassi</span>
+    <button type="button" class="golf-btn" id="golf-toggle" aria-expanded="false" aria-controls="golf" aria-label="Play a hole of golf">
+      <svg class="flag-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 21V3"/><path class="pennant" d="M7 3.5l10 3.5-10 3.5" fill="currentColor"/><ellipse cx="9" cy="21" rx="5" ry="1.2"/></svg>
+      <span class="golf-tip">Play a hole?</span>
+    </button>
+  </div>
   <div class="golf" id="golf" hidden>
     <div class="green" id="green">
       <span class="hole" id="hole"></span>
