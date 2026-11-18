@@ -28,17 +28,6 @@ header{display:flex;flex-direction:column;gap:20px}
 header p{margin:0;color:var(--muted)}
 header .lede{font-size:18px;line-height:1.6;color:var(--ink)}
 h1{margin:0;font-family:Newsreader,Georgia,serif;font-weight:500;font-size:40px;line-height:1.15;letter-spacing:-.01em}
-.name{display:inline-grid;font:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
-.name span{grid-area:1/1;transition:opacity .35s ease,transform .35s ease,filter .35s ease}
-.name .hi{font-family:'Tiro Devanagari Hindi',Newsreader,serif;font-weight:400;opacity:0;transform:translateY(6px);filter:blur(4px)}
-.name.flip .en{opacity:0;transform:translateY(-6px);filter:blur(4px)}
-.name.flip .hi{opacity:1;transform:none;filter:none}
-@media (hover:hover){
-  .name:hover .en{opacity:0;transform:translateY(-6px);filter:blur(4px)}
-  .name:hover .hi{opacity:1;transform:none;filter:none}
-  .name.flip:hover .en{opacity:1;transform:none;filter:none}
-  .name.flip:hover .hi{opacity:0;transform:translateY(6px);filter:blur(4px)}
-}
 h2{margin:0 0 20px;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--faint)}
 
 
@@ -62,17 +51,19 @@ section p{margin:0}
 footer{display:flex;flex-direction:column;gap:16px}
 .foot-row{display:flex;align-items:center;gap:10px}
 .copyright{font-size:13px;color:var(--faint)}
-.golf-btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;min-width:44px;padding:0 12px 0 10px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--ink);cursor:pointer}
-.golf-tip{font-size:13px;color:var(--faint)}
-.golf-btn[aria-expanded="true"] .golf-tip{display:none}
-.golf-btn[aria-expanded="true"]{padding:0 10px}
-.flag-icon .pennant{color:var(--accent);transform-origin:7px 7px;transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
-.golf-btn:hover .pennant{transform:skewY(-12deg) scaleX(1.1)}
+.foot-row{gap:2px}
+.golf-btn{width:44px;height:44px;padding:0;border:0;background:none;font-size:15px;line-height:1;cursor:pointer;opacity:.75;transition:opacity .2s,transform .2s}
+.golf-btn:hover{opacity:1;transform:rotate(-10deg)}
+.obs{position:absolute}
+.wall{background:#E9E2CF;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.35)}
+.sand{background:#E7D3A1;border-radius:40%;box-shadow:inset 0 0 0 2px #D4BE85}
+.water{background:#3C7FB0;border-radius:45%;box-shadow:inset 0 0 0 3px #2F6893}
+.golf-hole{font-weight:600;color:var(--ink)}
 .golf{display:flex;flex-direction:column;gap:10px}
 .golf[hidden]{display:none}
 .green{position:relative;width:360px;max-width:100%;height:150px;border-radius:14px;overflow:hidden;background:repeating-linear-gradient(90deg,#3F8350 0 30px,#47905A 30px 60px);box-shadow:inset 0 0 0 6px #2E6B3C;cursor:crosshair;touch-action:none;user-select:none;-webkit-user-select:none}
 .green span{position:absolute}
-.hole{width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:50%;background:#10170F;box-shadow:inset 0 2px 3px rgba(0,0,0,.6)}
+.hole{width:13px;height:13px;margin:-6.5px 0 0 -6.5px;z-index:1;border-radius:50%;background:#10170F;box-shadow:inset 0 2px 3px rgba(0,0,0,.6)}
 .pole{width:2px;height:34px;margin-top:-34px;background:#F2F0EB}
 .flag{margin:-34px 0 0 2px;border-top:6px solid transparent;border-bottom:6px solid transparent;border-left:12px solid #E0473A}
 .aim{height:0;border-top:2px dashed rgba(255,255,255,.85);transform-origin:0 0;display:none}

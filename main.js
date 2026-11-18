@@ -100,12 +100,6 @@
   });
   apply();
 
-  /* ---------- Name in Devanagari ---------- */
-  var nameBtn = document.getElementById('name');
-  nameBtn.addEventListener('click', function () {
-    var on = nameBtn.classList.toggle('flip');
-    nameBtn.setAttribute('aria-pressed', String(on));
-  });
 
   /* ---------- Copy email ---------- */
   var email = document.getElementById('email');
@@ -126,58 +120,125 @@
     }
   });
 
-  /* ---------- Hidden golf ---------- */
+  /* ---------- Golf ---------- */
   var toggle = document.getElementById('golf-toggle');
   var golf = document.getElementById('golf');
   var green = document.getElementById('green');
   var holeEl = document.getElementById('hole'), poleEl = document.getElementById('pole'), flagEl = document.getElementById('flag');
   var aimEl = document.getElementById('aim'), ballEl = document.getElementById('ball');
-  var msg = document.getElementById('golf-msg'), nextBtn = document.getElementById('next-hole');
-  var BR = 5, EDGE = 6;
-  var ball = { x: 40, y: 75, vx: 0, vy: 0 }, hole = { x: 310, y: 75 };
-  var strokes = 0, sunk = false, aimFrom = null, aimVec = null, golfRaf = null;
+  var msg = document.getElementById('golf-msg'), holeLabel = document.getElementById('golf-hole'), nextBtn = document.getElementById('next-hole');
+  var BR = 5, EDGE = 6, CUP = 6.5, CAPTURE_SPEED = 3.6;
+
+  // Layouts in fractions of the green's width and height.
+  var COURSE = [
+    { par: 3, start: [0.09, 0.5], hole: [0.88, 0.25], obs: [
+      { type: 'wall', x: 0.47, y: 0, w: 0.025, h: 0.66 },
+      { type: 'sand', x: 0.66, y: 0.55, w: 0.16, h: 0.32 }
+    ] },
+    { par: 3, start: [0.09, 0.5], hole: [0.88, 0.5], obs: [
+      { type: 'water', x: 0.33, y: 0.22, w: 0.26, h: 0.56 },
+      { type: 'sand', x: 0.74, y: 0.08, w: 0.14, h: 0.26 },
+      { type: 'sand', x: 0.74, y: 0.66, w: 0.14, h: 0.26 }
+    ] },
+    { par: 4, start: [0.08, 0.8], hole: [0.9, 0.32], obs: [
+      { type: 'wall', x: 0.3, y: 0.32, w: 0.025, h: 0.68 },
+      { type: 'wall', x: 0.62, y: 0, w: 0.025, h: 0.68 },
+      { type: 'water', x: 0.4, y: 0.06, w: 0.14, h: 0.3 },
+      { type: 'sand', x: 0.72, y: 0.62, w: 0.15, h: 0.3 }
+    ] }
+  ];
+  var holeIdx = 0, layout, obs = [], obsEls = [];
+  var ball = { x: 0, y: 0, vx: 0, vy: 0 }, hole = { x: 0, y: 0 }, shotFrom = { x: 0, y: 0 };
+  var strokes = 0, total = 0, sunk = false, aimFrom = null, aimVec = null, golfRaf = null;
 
   function W() { return green.clientWidth; }
   function H() { return green.clientHeight; }
   function place(el, x, y) { el.style.left = x + 'px'; el.style.top = y + 'px'; }
-  function drawHole() { [holeEl, poleEl, flagEl].forEach(function (el) { place(el, hole.x, hole.y); }); }
   function drawBall() { place(ballEl, ball.x, ball.y); }
-  function resetHole(random) {
-    var w = W();
-    ball = { x: 40, y: H() / 2, vx: 0, vy: 0 };
-    hole = random
-      ? { x: Math.round(w * 0.6 + Math.random() * (w * 0.32)), y: Math.round(30 + Math.random() * (H() - 60)) }
-      : { x: w - 50, y: H() / 2 };
+
+  function loadHole(i) {
+    holeIdx = i; layout = COURSE[i];
+    var w = W(), h = H();
+    obsEls.forEach(function (el) { el.remove(); });
+    obsEls = []; obs = [];
+    layout.obs.forEach(function (o) {
+      var r = { type: o.type, x: o.x * w, y: o.y * h, w: o.w * w, h: o.h * h };
+      var el = document.createElement('span');
+      el.className = 'obs ' + o.type;
+      el.style.left = r.x + 'px'; el.style.top = r.y + 'px'; el.style.width = r.w + 'px'; el.style.height = r.h + 'px';
+      green.insertBefore(el, holeEl);
+      obs.push(r); obsEls.push(el);
+    });
+    hole = { x: layout.hole[0] * w, y: layout.hole[1] * h };
+    ball = { x: layout.start[0] * w, y: layout.start[1] * h, vx: 0, vy: 0 };
+    [holeEl, poleEl, flagEl].forEach(function (el) { place(el, hole.x, hole.y); });
     strokes = 0; sunk = false;
     ballEl.classList.remove('sunk');
     nextBtn.hidden = true;
-    drawHole(); drawBall();
+    holeLabel.textContent = 'Hole ' + (i + 1) + ' · Par ' + layout.par;
+    msg.textContent = i === 0 ? 'Drag back and release to putt.' : 'Strokes: 0';
+    drawBall();
   }
 
   toggle.addEventListener('click', function () {
     var open = golf.hidden;
     golf.hidden = !open;
     toggle.setAttribute('aria-expanded', String(open));
-    if (open && !strokes && !sunk) resetHole(false);
+    if (open && !layout) loadHole(0);
   });
+
+  function inside(r, x, y, pad) { return x > r.x - pad && x < r.x + r.w + pad && y > r.y - pad && y < r.y + r.h + pad; }
+  function scoreName(s, par) {
+    if (s === 1) return 'Hole in one. Respect.';
+    var d = s - par;
+    return ({ '-2': 'Eagle.', '-1': 'Birdie.', '0': 'Par.', '1': 'Bogey.', '2': 'Double bogey.' })[d] || (s + ' strokes. Rough one.');
+  }
 
   function loop() {
     cancelAnimationFrame(golfRaf);
     (function step() {
       var w = W(), h = H();
+      var px = ball.x, py = ball.y;
       ball.x += ball.vx; ball.y += ball.vy;
       if (ball.x < BR + EDGE) { ball.x = BR + EDGE; ball.vx = -ball.vx * 0.7; }
       if (ball.x > w - BR - EDGE) { ball.x = w - BR - EDGE; ball.vx = -ball.vx * 0.7; }
       if (ball.y < BR + EDGE) { ball.y = BR + EDGE; ball.vy = -ball.vy * 0.7; }
       if (ball.y > h - BR - EDGE) { ball.y = h - BR - EDGE; ball.vy = -ball.vy * 0.7; }
-      ball.vx *= 0.982; ball.vy *= 0.982;
+
+      var friction = 0.982;
+      for (var i = 0; i < obs.length; i++) {
+        var o = obs[i];
+        if (o.type === 'wall' && inside(o, ball.x, ball.y, BR)) {
+          var wasOutX = px <= o.x - BR || px >= o.x + o.w + BR;
+          if (wasOutX) { ball.x = px; ball.vx = -ball.vx * 0.75; }
+          else { ball.y = py; ball.vy = -ball.vy * 0.75; }
+        } else if (o.type === 'sand' && inside(o, ball.x, ball.y, 0)) {
+          friction = 0.9;
+        } else if (o.type === 'water' && inside(o, ball.x, ball.y, -2)) {
+          ball = { x: shotFrom.x, y: shotFrom.y, vx: 0, vy: 0 };
+          strokes++;
+          msg.textContent = 'Splash. +1 stroke. Strokes: ' + strokes;
+          drawBall();
+          return;
+        }
+      }
+      ball.vx *= friction; ball.vy *= friction;
+
       var sp = Math.hypot(ball.vx, ball.vy), d = Math.hypot(ball.x - hole.x, ball.y - hole.y);
-      if (d < 8 && sp < 5.5) {
+      if (d < CUP && sp < CAPTURE_SPEED) {
         ball.x = hole.x; ball.y = hole.y; ball.vx = ball.vy = 0; sunk = true;
+        total += strokes;
         ballEl.classList.add('sunk'); drawBall();
-        msg.textContent = strokes === 1 ? 'Hole in one. Respect.' : 'Sunk in ' + strokes + '.';
+        var last = holeIdx === COURSE.length - 1;
+        msg.textContent = scoreName(strokes, layout.par) + (last ? ' Course total: ' + total + ' (par 10).' : '');
+        nextBtn.textContent = last ? 'Play again' : 'Next hole';
         nextBtn.hidden = false;
         return;
+      }
+      if (d < CUP + 3 && sp >= CAPTURE_SPEED) {
+        // Lipped out: a fast ball skims the cup and gets nudged sideways.
+        var nx = (ball.x - hole.x) / (d || 1), ny = (ball.y - hole.y) / (d || 1);
+        ball.vx += nx * 0.6; ball.vy += ny * 0.6;
       }
       drawBall();
       if (sp < 0.06) { ball.vx = ball.vy = 0; return; }
@@ -207,6 +268,7 @@
     var len = Math.hypot(aimVec.dx, aimVec.dy);
     if (len < 6) return;
     var p = Math.min(len, 110) / len * 0.13;
+    shotFrom = { x: ball.x, y: ball.y };
     ball.vx = -aimVec.dx * p; ball.vy = -aimVec.dy * p;
     strokes++;
     msg.textContent = 'Strokes: ' + strokes;
@@ -215,7 +277,7 @@
   green.addEventListener('pointerup', release);
   green.addEventListener('pointercancel', release);
   nextBtn.addEventListener('click', function () {
-    resetHole(true);
-    msg.textContent = 'New hole. Drag back and release.';
+    if (holeIdx === COURSE.length - 1) { total = 0; loadHole(0); }
+    else loadHole(holeIdx + 1);
   });
 })();
